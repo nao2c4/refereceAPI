@@ -35,8 +35,8 @@ class Reference:
         return bool(self._title)
     
     def _get_authors(self) -> int:
-        self.authors = list(map(self._get_author, self.data['author']))
-        self.initial_authors = list(map(self._get_initial_author, self.data['author']))
+        self.authors = list(filter(lambda s: s is not None, map(self._get_author, self.data['author'])))
+        self.initial_authors = list(filter(lambda s: s is not None, map(self._get_initial_author, self.data['author'])))
         return len(self.authors)
     
     def _get_journal(self) -> bool:
@@ -102,12 +102,16 @@ class Reference:
 
     @staticmethod
     def _get_author(dic: dict) -> str:
+        if 'family' not in dic:
+            return None
         if 'given' not in dic:
             return dic['family']
         return ' '.join([dic['given'], dic['family']])
     
     @staticmethod
     def _get_initial_author(dic: dict) -> str:
+        if 'family' not in dic:
+            return None
         if 'given' not in dic:
             return dic['family']
         names = (dic['given'] + ' ' + dic['family']).split(' ')

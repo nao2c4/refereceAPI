@@ -16,6 +16,17 @@ def jjap_like(ref: 'Reference', initial: bool = True) -> str:
     )
 
 
+def short(ref: 'Reference') -> str:
+    return '{}, {}, {}({}), {} ({}).'.format(
+        _get_authors_short(ref),
+        ref.full_journal if not(ref.short_journal) else ref.short_journal,
+        ref.volume,
+        ref.issue,
+        ref.page,
+        ref.year,
+    )
+
+
 def bibtex(ref: 'Reference') -> str:
     return '\n'.join([
         '@article{',
@@ -48,3 +59,15 @@ def _get_authors_jjap_like(ref: 'Reference', initial: bool = True) -> str:
     if size == 2:
         return authors[0] + ', ' + authors[1]
     return ', '.join(authors[:-1]) + ', and ' + authors[-1]
+
+
+def _get_authors_short(ref: 'Reference') -> str:
+    authors = ref.initial_authors
+    size = len(authors)
+    if size == 0:
+        return ''
+    if size == 1:
+        return authors[0]
+    if size == 2:
+        return authors[0] + ' & ' + authors[1]
+    return authors[0] + ' et al.'

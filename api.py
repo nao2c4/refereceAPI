@@ -1,5 +1,5 @@
 from flask import Flask, request
-from utils import Reference, jjap_like, bibtex
+from utils import Reference, jjap_like, bibtex, short
 
 
 app = Flask(__name__)
@@ -14,6 +14,11 @@ def get_jjap(doi):
 @app.route('/jjap-fullname/<path:doi>')
 def get_jjap_fullname(doi):
     return jjap_like(ref(doi), False)
+
+
+@app.route('/short/<path:doi>')
+def get_short(doi):
+    return short(ref(doi))
 
 
 @app.route('/bibtex/<path:doi>')
