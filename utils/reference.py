@@ -1,3 +1,4 @@
+import re
 import requests
 
 
@@ -91,13 +92,16 @@ class Reference:
         self.year = '404'
         
     def _capitalize(self, title: str):
-        lst = title.split(' ')
-        return ' '.join([lst[0].capitalize()] + list(map(self._capitalize_word, lst[1:])))
+        return re.sub(
+            r"[A-Za-z]+('[A-Za-z]+)?",
+            lambda mo: self._capitalize_word(mo.group(0)),
+            title,
+        )
 
     def jjap_like(self, initial: bool = True) -> str:
         return '{}. "{}", {} ({}), {} ({}), {} ({}).\nDOI: {}{}'.format(
             self._get_authors_jjap_like(initial),
-            self.title,
+            self.capitalized_title,
             self.full_journal,
             self.short_journal,
             self.volume,
@@ -115,7 +119,7 @@ class Reference:
                 '  {},'.format(self.doi),
                 'author={{{}}},'.format(' and '.join(self.authors)),
                 'year={{{}}},'.format(self.year),
-                'title={{{}}},'.format(self.title),
+                'title={{{}}},'.format(self.capitalized_title),
                 'journal={{{}}},'.format(self.full_journal),
                 'volume={{{}}},'.format(self.volume),
                 'number={{{}}},'.format(self.issue),
