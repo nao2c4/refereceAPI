@@ -58,16 +58,16 @@ class Reference:
         return value[0], value[1:]
 
     def _get_year(self) -> bool:
-        if 'published-print' not in self.data:
+        if 'issued' not in self.data:
             self.year = 'Unknown'
             return True
-        if 'date-parts' not in self.data['published-print']:
+        if 'date-parts' not in self.data['issued']:
             self.year = 'Unknown'
             return True
-        if not(self.data['published-print']['date-parts']):
+        if not(self.data['issued']['date-parts']):
             self.year = 'Unknown'
             return True
-        self.year = self.data['published-print']['date-parts'][0][0]
+        self.year = self.data['issued']['date-parts'][0][0]
         return False
     
     def _get_year_old(self) -> bool:
