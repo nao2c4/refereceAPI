@@ -30,10 +30,12 @@ class Reference:
     
     def _get_title(self) -> bool:
         self.title, self._title = self._get_params('title')
+        self.capitalized_title = self._capitalize(self.title)
         return bool(self._title)
     
     def _get_authors(self) -> int:
         self.authors = list(map(self._get_author, self.data['author']))
+        self.initial_authors = list(map(self._get_initial_author, self.data['author']))
         return len(self.authors)
     
     def _get_journal(self) -> bool:
@@ -95,7 +97,7 @@ class Reference:
     def jjap_like(self, initial: bool = True) -> str:
         return '{}. "{}", {} ({}), {} ({}), {} ({}).\nDOI: {}{}'.format(
             self._get_authors_jjap_like(initial),
-            self._capitalize(self.title),
+            self.title,
             self.full_journal,
             self.short_journal,
             self.volume,
@@ -113,7 +115,7 @@ class Reference:
                 '  {},'.format(self.doi),
                 'author={{{}}},'.format(' and '.join(self.authors)),
                 'year={{{}}},'.format(self.year),
-                'title={{{}}},'.format(self._capitalize(self.title)),
+                'title={{{}}},'.format(self.title),
                 'journal={{{}}},'.format(self.full_journal),
                 'volume={{{}}},'.format(self.volume),
                 'number={{{}}},'.format(self.issue),
@@ -125,7 +127,7 @@ class Reference:
     
     def _get_authors_jjap_like(self, initial: bool = True) -> str:
         authors = (
-            list(map(self._get_initial, self.authors))
+            self.initial_authors
             if initial
             else self.authors
         )
@@ -139,13 +141,17 @@ class Reference:
         return ', '.join(authors[:-1]) + ', and ' + authors[-1]
 
     @staticmethod
-    def _get_initial(author) -> str:
-        names = author.split(' ')
-        return ' '.join([name[0] + '.' for name in names[0:-1]] + [names[-1]])
+    def _get_author(dic: dict) -> str:
+        if 'given' not in dic:
+            return dic['family']
+        return ' '.join([dic['given'], dic['family']])
     
     @staticmethod
-    def _get_author(dic: dict):
-        return ' '.join([dic['given'], dic['family']])
+    def _get_initial_author(dic: dict) -> str:
+        if 'given' not in dic:
+            return dic['family']
+        givens = dic['given'].split(' ')
+        return ' '.join([name[0] + '.' for name in givens] + [dic['family']])
     
     @staticmethod
     def _capitalize_word(word: str) -> str:
