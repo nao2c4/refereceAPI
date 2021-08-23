@@ -98,52 +98,6 @@ class Reference:
             title,
         )
 
-    def jjap_like(self, initial: bool = True) -> str:
-        return '{}. "{}", {} ({}), {} ({}), {} ({}).\nDOI: {}{}'.format(
-            self._get_authors_jjap_like(initial),
-            self.capitalized_title,
-            self.full_journal,
-            self.short_journal,
-            self.volume,
-            self.issue,
-            self.page,
-            self.year,
-            self.url_doi,
-            self.doi,
-        )
-    
-    def bibtex(self) -> str:
-        return '\n'.join([
-            '@article{',
-            ('\n' + ' '*4).join([
-                '  {},'.format(self.doi),
-                'author={{{}}},'.format(' and '.join(self.authors)),
-                'year={{{}}},'.format(self.year),
-                'title={{{}}},'.format(self.capitalized_title),
-                'journal={{{}}},'.format(self.full_journal),
-                'volume={{{}}},'.format(self.volume),
-                'number={{{}}},'.format(self.issue),
-                'pages={{{}}},'.format(self.page),
-                'doi={{{}{}}},'.format(self.url_doi, self.doi),
-            ])
-            ,'}',
-        ])
-    
-    def _get_authors_jjap_like(self, initial: bool = True) -> str:
-        authors = (
-            self.initial_authors
-            if initial
-            else self.authors
-        )
-        size = len(authors)
-        if size == 0:
-            return ''
-        if size == 1:
-            return authors[0]
-        if size == 2:
-            return authors[0] + ', ' + authors[1]
-        return ', '.join(authors[:-1]) + ', and ' + authors[-1]
-
     @staticmethod
     def _get_author(dic: dict) -> str:
         if 'given' not in dic:
@@ -154,8 +108,12 @@ class Reference:
     def _get_initial_author(dic: dict) -> str:
         if 'given' not in dic:
             return dic['family']
-        givens = dic['given'].split(' ')
-        return ' '.join([name[0] + '.' for name in givens] + [dic['family']])
+        names = (dic['given'] + ' ' + dic['family']).split(' ')
+        return re.sub(
+            r"[A-Za-z]+('[A-Za-z]+)?",
+            lambda mo: mo.group(0)[0] + '.',
+            ' '.join(names[:-1]),
+        ) + ' ' + names[-1]
     
     @staticmethod
     def _capitalize_word(word: str) -> str:
