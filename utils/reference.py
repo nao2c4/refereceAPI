@@ -83,7 +83,9 @@ class Reference:
     
     def _set_dummy(self):
         self.title = ''
+        self.capitalized_title = ''
         self.authors = []
+        self.initial_authors = []
         self.full_journal = ''
         self.short_journal = ''
         self.volume = ''
