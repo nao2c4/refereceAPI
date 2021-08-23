@@ -2,7 +2,7 @@ from utils.reference import Reference
 
 
 def jjap_like(ref: 'Reference', initial: bool = True) -> str:
-    return '{}. "{}", {} ({}), {} ({}), {} ({}).\nDOI: {}{}'.format(
+    return '{}, "{}", {} ({}), {} ({}), {} ({}).\nDOI: {}{}'.format(
         _get_authors_jjap_like(ref, initial),
         ref.capitalized_title,
         ref.full_journal,
