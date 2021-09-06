@@ -19,7 +19,7 @@ def jjap_like(ref: 'Reference', initial: bool = True) -> str:
 def short(ref: 'Reference') -> str:
     return '{}, {}, {}({}), {} ({}).'.format(
         _get_authors_short(ref),
-        ref.full_journal if not(ref.short_journal) else ref.short_journal,
+        ref.full_journal if not (ref.short_journal) else ref.short_journal,
         ref.volume,
         ref.issue,
         ref.page,
@@ -28,29 +28,29 @@ def short(ref: 'Reference') -> str:
 
 
 def bibtex(ref: 'Reference') -> str:
-    return '\n'.join([
-        '@article{',
-        ('\n' + ' '*4).join([
-            '  {},'.format(ref.doi),
-            'author={{{}}},'.format(' and '.join(ref.authors)),
-            'year={{{}}},'.format(ref.year),
-            'title={{{}}},'.format(ref.capitalized_title),
-            'journal={{{}}},'.format(ref.full_journal),
-            'volume={{{}}},'.format(ref.volume),
-            'number={{{}}},'.format(ref.issue),
-            'pages={{{}}},'.format(ref.page),
-            'doi={{{}{}}},'.format(ref.url_doi, ref.doi),
-        ])
-        ,'}',
-    ])
+    return '\n'.join(
+        [
+            '@article{',
+            ('\n' + ' ' * 4).join(
+                [
+                    '  {},'.format(ref.doi),
+                    'author={{{}}},'.format(' and '.join(ref.authors)),
+                    'year={{{}}},'.format(ref.year),
+                    'title={{{}}},'.format(ref.capitalized_title),
+                    'journal={{{}}},'.format(ref.full_journal),
+                    'volume={{{}}},'.format(ref.volume),
+                    'number={{{}}},'.format(ref.issue),
+                    'pages={{{}}},'.format(ref.page),
+                    'doi={{{}{}}},'.format(ref.url_doi, ref.doi),
+                ]
+            ),
+            '}',
+        ]
+    )
 
 
 def _get_authors_jjap_like(ref: 'Reference', initial: bool = True) -> str:
-    authors = (
-        ref.initial_authors
-        if initial
-        else ref.authors
-    )
+    authors = ref.initial_authors if initial else ref.authors
     size = len(authors)
     if size == 0:
         return ''
