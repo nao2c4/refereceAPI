@@ -3,6 +3,22 @@ import requests
 
 
 class Reference:
+    """This class downloads and analyzes information from DOI.
+
+    Attributes:
+        doi (str): DOI番号
+        title (str): Cross-refソースのタイトル
+        capitalized_title (str): 単語のはじめを大文字にしたタイトル
+            略語の2文字目以降小文字にしてしまうバグあり
+        authors (list[str]): Cross-refソースの著者
+        initial_authors (list[str]): イニシャル表示の著者
+        full_journal (str): ジャーナル名
+        short_journal (str): 短縮されたジャーナル名
+        volume (str): Volume番号
+        issue (str): Issume番号
+        page (str): ページ番号
+        year (str): 発行年
+    """
 
     url_base = r'https://api.crossref.org/works/'
     url_doi = r'https://doi.org/'
