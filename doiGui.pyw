@@ -67,7 +67,7 @@ class DoiGUI(QW.QWidget):
         button.setFont(self.font)
         self.functions.append(fn)
 
-        f = lambda x: pyperclip.copy(line_widget.text())
+        f = lambda x: pyperclip.copy(line_widget.toPlainText())
         button.clicked.connect(f)
 
         layout = QW.QHBoxLayout()
